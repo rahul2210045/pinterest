@@ -1,90 +1,36 @@
-import 'dart:async';
-import 'dart:io';
-
 class AppException implements Exception {
-  final message;
-  final prefix;
-  AppException({this.message, this.prefix});
+  final String message;
+  final String prefix;
+
+  AppException(this.message, this.prefix);
 
   @override
-  String toString() {
-    return '$prefix $message';
-  }
-}
-
-class BadRequestException extends AppException {
-  BadRequestException([
-    String? message,
-  ]) : super(message: message, prefix: 'Bad request');
+  String toString() => '$prefix: $message';
 }
 
 class FetchDataException extends AppException {
-  FetchDataException([
-    String? message,
-  ]) : super(
-          message: message,
-          prefix: 'Unable to process the request',
-        );
+  FetchDataException(String message)
+      : super(message, 'Network Error');
 }
 
-class ApiNotRespondingException extends AppException {
-  ApiNotRespondingException([
-    String? message,
-  ]) : super(
-          message: message,
-          prefix: 'Api not responding',
-        );
+class BadRequestException extends AppException {
+  BadRequestException(String message)
+      : super(message, 'Bad Request');
 }
 
-class UnAuthorizedException extends AppException {
-  UnAuthorizedException([
-    String? message,
-  ]) : super(
-          message: message,
-          prefix: 'Unauthorized request',
-        );
+class UnauthorizedException extends AppException {
+  UnauthorizedException(String message)
+      : super(message, 'Unauthorized');
 }
 
 class NotFoundException extends AppException {
-  NotFoundException([
-    String? message,
-  ]) : super(
-          message: message,
-          prefix: 'Page not found',
-        );
+  NotFoundException(String message)
+      : super(message, 'Not Found');
 }
 
-class InternalServerError extends AppException {
-  InternalServerError([
-    String? message,
-  ]) : super(
-          message: message,
-          prefix: 'Internal Server error',
-        );
+class ServerException extends AppException {
+  ServerException(String message)
+      : super(message, 'Server Error');
 }
 
-class ExceptionHandlers {
-  getExceptionString(error) {
-    if (error is SocketException) {
-      return "this is the error for no internet connection ${error.message.toString()}";
-    } else if (error is HttpException) {
-      return 'HTTP error occured.';
-    } else if (error is FormatException) {
-      return 'Invalid data format.';
-    } else if (error is TimeoutException) {
-      return 'Request timedout.';
-    } else if (error is BadRequestException) {
-      return error.message.toString();
-    } else if (error is UnAuthorizedException) {
-      return error.message.toString();
-    } else if (error is NotFoundException) {
-      return error.message.toString();
-    } else if (error is FetchDataException) {
-      return error.message.toString();
-    } else if (error is InternalServerError) {
-      return error.message.toString();
-    } else {
-      return 'Unknown error occurred.';
-    }
-  }
-}
+
