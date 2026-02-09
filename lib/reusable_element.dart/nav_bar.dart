@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pinterest/core/key/global_key.dart';
+import 'package:flutter/material.dart';
+import 'package:pinterest/core/controllers/profile_icon_controller.dart';
+import 'package:pinterest/core/key/global_key.dart';
 
 class PinterestBottomNav extends StatelessWidget {
   final int selectedIndex;
@@ -18,9 +21,7 @@ class PinterestBottomNav extends StatelessWidget {
       child: Container(
         height: 64,
         padding: const EdgeInsets.symmetric(horizontal: 18),
-        decoration: const BoxDecoration(
-          color: Colors.black,
-        ),
+        color: Colors.black,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -34,25 +35,40 @@ class PinterestBottomNav extends StatelessWidget {
               selected: selectedIndex == 1,
               onTap: () => onTap(1),
             ),
-            _CreateButton(
-              onTap: () => onTap(2),
-            ),
+            _CreateButton(onTap: () => onTap(2)),
             _NavItem(
               icon: Icons.chat_bubble_outline,
               selected: selectedIndex == 3,
               onTap: () => onTap(3),
             ),
-            _ProfileNavItem(
-              key: profileTabKey, 
-              selected: selectedIndex == 4,
-              onTap: () => onTap(4),
-            ),
+
+ValueListenableBuilder<bool>(
+  valueListenable: profileIconVisibility,
+  builder: (_, visible, child) {
+    return Opacity(
+      opacity: visible ? 1 : 0,
+      child: IgnorePointer(
+        ignoring: !visible,
+        child: child,
+      ),
+    );
+  },
+  child: _ProfileNavItem(
+    key: profileTabKey,
+    selected: selectedIndex == 4,
+    onTap: () => onTap(4),
+  ),
+),
+
+          
           ],
         ),
       ),
     );
   }
 }
+
+
 class _NavItem extends StatelessWidget {
   final IconData icon;
   final bool selected;
@@ -69,14 +85,11 @@ class _NavItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Icon(
-        icon,
-        size: 28,
-        color: selected ? Colors.white : Colors.grey,
-      ),
+      child: Icon(icon, size: 28, color: selected ? Colors.white : Colors.grey),
     );
   }
 }
+
 class _CreateButton extends StatelessWidget {
   final VoidCallback onTap;
 
@@ -93,11 +106,7 @@ class _CreateButton extends StatelessWidget {
           color: Colors.white,
           shape: BoxShape.circle,
         ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.black,
-          size: 28,
-        ),
+        child: const Icon(Icons.add, color: Colors.black, size: 28),
       ),
     );
   }
@@ -128,10 +137,11 @@ class _ProfileNavItem extends StatelessWidget {
         ),
         child: const CircleAvatar(
           backgroundImage: NetworkImage(
-            'https://i.pravatar.cc/150?img=3', 
+            'https://i.pravatar.cc/150?img=3',
           ),
         ),
       ),
     );
   }
 }
+

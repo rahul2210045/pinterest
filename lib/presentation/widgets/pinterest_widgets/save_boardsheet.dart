@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pinterest/presentation/screens/create_board_bottomsheet.dart';
+import 'package:pinterest/presentation/widgets/animation/save_pin_animation.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/board_button.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/board_list.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/suggested_board.dart';
@@ -42,7 +44,24 @@ class SaveToBoardBottomSheet extends StatelessWidget {
                 ),
               ),
 
-              const CreateBoardButton(),
+              CreateBoardButton(onTap: () {
+                showModalBottomSheet(
+  context: context,
+  isScrollControlled: true,
+  backgroundColor: Colors.transparent,
+  builder: (_) {
+    return CreateBoardBottomSheet(
+      photo: photo,
+      onComplete: () async {
+        await playSavePinAnimation(
+          context: context,
+          imageUrl: photo['src']['large'],
+        );
+      },
+    );
+  },
+);
+}),
             ],
           ),
         );
