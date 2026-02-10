@@ -6,15 +6,7 @@ import 'package:pinterest/data/local/saved_pin_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pinterest/data/local/board_model.dart';
-
-
-
 import 'package:clerk_flutter/clerk_flutter.dart';
-import 'package:pinterest/presentation/screens/auth_screens/auth_gate_screen.dart';
-import 'package:pinterest/presentation/screens/dashboard_screen.dart';
-
-
-
 
 
 Future<void> main() async {

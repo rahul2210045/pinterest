@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:clerk_flutter/clerk_flutter.dart';
 import 'package:clerk_auth/clerk_auth.dart' as clerk;
@@ -33,20 +32,25 @@ class AuthService {
 
     await auth.attemptSignUp(
       strategy: clerk.Strategy.password,
-      emailAddress: email, 
+      emailAddress: email,
       password: password,
       passwordConfirmation: password,
       // username: name,
     );
 
     // Save extra profile data
-    await auth.updateUser(
-      metadata: {
-        "dob": dob.toIso8601String(),
-        "gender": gender,
-        "country": country,
-      },
-    );
+    //   await auth.updateUser(
+    // metadata: {
+    //   "onboardingCompleted": false,
+    // },
+    // );
+    // await auth.updateUser(
+    //   metadata: {
+    //     "dob": dob.toIso8601String(),
+    //     "gender": gender,
+    //     "country": country,
+    //   },
+    // );
   }
 
   /// GOOGLE SIGN IN
