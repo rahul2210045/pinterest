@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pinterest/core/key/global_key.dart';
-import 'package:flutter/material.dart';
-import 'package:pinterest/core/controllers/profile_icon_controller.dart';
-import 'package:pinterest/core/key/global_key.dart';
 
 class PinterestBottomNav extends StatelessWidget {
   final int selectedIndex;

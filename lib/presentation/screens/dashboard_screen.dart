@@ -5,6 +5,7 @@ import 'package:pinterest/presentation/screens/detial_screen.dart';
 import 'package:pinterest/presentation/state_management/provider/board_provider.dart';
 import 'package:pinterest/presentation/state_management/provider/board_tab_provider.dart';
 import 'package:pinterest/presentation/state_management/provider/dashboard_provider.dart';
+import 'package:pinterest/presentation/state_management/provider/recently_viewed_provider.dart';
 import 'package:pinterest/presentation/widgets/animation/save_pin_animation.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/bottom_sheet.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/dashboard_tabs.dart';
@@ -22,7 +23,7 @@ class DashboardScreen extends ConsumerStatefulWidget {
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   late final ScrollController _controller;
-  int _currentIndex = 0;
+  // int _currentIndex = 0;
 
   @override
   void initState() {
@@ -132,12 +133,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: PinterestBottomNav(
-        selectedIndex: _currentIndex,
-        onTap: (i) {
-          setState(() => _currentIndex = i);
-        },
-      ),
+      // bottomNavigationBar: PinterestBottomNav(
+      //   selectedIndex: _currentIndex,
+      //   onTap: (i) {
+      //     setState(() => _currentIndex = i);
+      //   },
+      // ),
     );
   }
 
@@ -162,7 +163,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 id: photo['id'].toString(),
                 imageUrl: photo['src']['large'],
                 aspectRatio: photo['width'] / photo['height'],
-                onTap: () => openPinDetail(context, photo),
+                onTap: () async {
+                  // await markPinAsViewed(savedPin);
+
+                  openPinDetail(context, photo);
+                },
+                // () =>
+                //  openPinDetail(context, photo),
                 registerSaveHandler: (fn) => saveUI = fn,
                 onMoreTap: () {
                   openPinActionsSheet(context, photo, (board) async {
@@ -244,5 +251,4 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ]),
     );
   }
-
 }
