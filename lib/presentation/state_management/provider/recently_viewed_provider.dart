@@ -16,16 +16,7 @@ final recentViewedProvider = Provider<List<SavedPinModel>>((ref) {
 });
 Future<void> markPinAsViewed(SavedPinModel pin) async {
   pin.savedAt = DateTime.now();
-  await pin.save(); // HiveObject method
+  await pin.save(); 
 }
 
 
-// final localSearchProvider = Provider.family<LocalSearchResult, String>((ref, q) {
-//   final boards = ref.watch(boardProvider);
-//   final pins = boards.expand((b) => b.pins).toList();
-
-//   return LocalSearchResult(
-//     boards: boards.where((b) => b.name.contains(q)).toList(),
-//     pins: pins.where((p) => p.alt.contains(q)).toList(),
-//   );
-// });

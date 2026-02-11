@@ -18,7 +18,6 @@ class _DobScreenState extends State<DobScreen> {
   void initState() {
     super.initState();
 
-    /// Open DOB picker immediately
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _openDobPicker();
     });
@@ -109,7 +108,6 @@ class _DobScreenState extends State<DobScreen> {
             children: [
               const SizedBox(height: 12),
 
-              /// 🔝 Header
               Row(
                 children: [
                   IconButton(
@@ -117,14 +115,14 @@ class _DobScreenState extends State<DobScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   const Spacer(),
-                  const StepDots(currentStep: 3), // 👈 4th dot active
+                  const StepDots(currentStep: 3), 
                   const Spacer(),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              /// Title
+              
               const Text(
                 "Hi Rahul! Enter your birthdate",
                 textAlign: TextAlign.center,
@@ -151,7 +149,6 @@ class _DobScreenState extends State<DobScreen> {
 
               const SizedBox(height: 40),
 
-              /// Selected Date (Tap to reopen picker)
               GestureDetector(
                 onTap: _openDobPicker,
                 child: Text(
@@ -173,14 +170,12 @@ class _DobScreenState extends State<DobScreen> {
 
               const Spacer(),
 
-              /// 🔴 Next Button
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: isValid
                       ? () {
-                          /// 👉 Navigate to gender screen next
                           context.go('/step-gender');
                         }
                       : null,

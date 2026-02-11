@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: createRouter(context),
-      // routerConfig: appRouter,
       title: 'Pinterest Clone',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

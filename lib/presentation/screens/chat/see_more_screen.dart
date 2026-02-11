@@ -27,7 +27,9 @@ class SeeMoreMessagesScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.white, size: 22),
-            onPressed: () {context.push('/new-message');},
+            onPressed: () {
+              context.push('/new-message');
+            },
           ),
         ],
       ),
@@ -35,7 +37,6 @@ class SeeMoreMessagesScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           const SizedBox(height: 10),
-          // Messages Header
           const Text(
             'Messages',
             style: TextStyle(
@@ -45,15 +46,15 @@ class SeeMoreMessagesScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          
-          // Your Provided Chat Tile
-          _chatTile(onTap: (){
-            context.push('/chat-screen');
-          }),
-          
+
+          _chatTile(
+            onTap: () {
+              context.push('/chat-screen');
+            },
+          ),
+
           const SizedBox(height: 30),
-          
-          // Contacts Header
+
           const Text(
             'Contacts',
             style: TextStyle(
@@ -63,14 +64,16 @@ class SeeMoreMessagesScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          
-          // Your Provided Find People Card
+
           _findPeopleCard(),
-          
+
           const SizedBox(height: 24),
-          
-          // Additional Chat Tiles as requested
-          _chatTile(onTap: () {context.push('/chat-screen');}),
+
+          _chatTile(
+            onTap: () {
+              context.push('/chat-screen');
+            },
+          ),
           const SizedBox(height: 16),
           _chatTile(onTap: () {}),
         ],
@@ -82,38 +85,32 @@ class SeeMoreMessagesScreen extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Row(
-      children: [
-        const CircleAvatar(
-        radius: 22,
-        backgroundColor: Colors.grey,
-        backgroundImage: AssetImage('assets/images/profile.jpg'),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-          Text(
-            'Ishika Shukla',
-            style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+        children: [
+          const CircleAvatar(
+            radius: 22,
+            backgroundColor: Colors.grey,
+            backgroundImage: AssetImage('assets/images/chat_logo.png'),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Ishika Shukla',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Text('Hi', style: TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
             ),
           ),
-          SizedBox(height: 2),
-          Text(
-            'Hi', 
-            style: TextStyle(color: Colors.grey, fontSize: 12)
-          ),
-          ],
-        ),
-        ),
-        const Text(
-        '9m', 
-        style: TextStyle(color: Colors.grey, fontSize: 12)
-        ),
-      ],
+          const Text('9m', style: TextStyle(color: Colors.grey, fontSize: 12)),
+        ],
       ),
     );
   }

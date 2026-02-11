@@ -53,29 +53,29 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 }
 
 
+Future<void> loadMore() async {
+  if (state.isPaginating || !_hasMore) return;
 
+  state = state.copyWith(isPaginating: true);
 
-  Future<void> loadMore() async {
-    if (state.isPaginating || !_hasMore) return;
-
-    state = state.copyWith(isPaginating: true);
+  try {
     _page++;
+    final more = await repository.fetchCuratedPhotos(page: _page);
 
-    try {
-      final more = await repository.fetchCuratedPhotos(page: _page);
-
-      if (more.isEmpty) {
-        _hasMore = false;
-      }
-
-      state = state.copyWith(
-        photos: [...state.photos, ...more],
-        isPaginating: false,
-      );
-    } catch (_) {
-      state = state.copyWith(isPaginating: false);
+    if (more.isEmpty) {
+      _hasMore = false;
     }
+
+    state = state.copyWith(
+      photos: [...state.photos, ...more],
+      isPaginating: false,
+    );
+  } catch (_) {
+    state = state.copyWith(isPaginating: false);
   }
+}
+
+
 }
 
 class DashboardState {

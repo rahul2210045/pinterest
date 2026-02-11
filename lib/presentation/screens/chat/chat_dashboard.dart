@@ -33,29 +33,24 @@ class InboxScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Messages header
             _sectionHeader(
               title: 'Messages',
               action: 'See all',
               onTap: () {
-                // Navigate to see more messages screen
                 context.push('/see-more-messages');
               },
             ),
 
             const SizedBox(height: 12),
 
-            // Chat item
             _chatTile(
               onTap: () {
-                // Navigate to chat screen with user details
                 context.push('/chat-screen');
               },
             ),
 
             const SizedBox(height: 24),
 
-            // Find people card
             _findPeopleCard(onTap: () => context.push('/new-message')),
 
             const SizedBox(height: 32),
@@ -71,11 +66,13 @@ class InboxScreen extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Updates illustration
             Center(
               child: Column(
                 children: [
-                  Image.asset('assets/images/collage.png', width: 120),
+                  Image.asset(
+                    'assets/images/bottle.png',
+                    height: 180,
+                  ),
 
                   const SizedBox(height: 24),
                   const Text(
@@ -96,7 +93,6 @@ class InboxScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- Widgets ----------------
 
   Widget _sectionHeader({
     required String title,
@@ -118,8 +114,7 @@ class InboxScreen extends StatelessWidget {
           ),
           InkWell(
             onTap: onTap,
-            // context.push('/see-more-messages');
-            // },
+          
             child: Row(
               children: [
                 Text(
@@ -147,7 +142,7 @@ class InboxScreen extends StatelessWidget {
         children: [
           const CircleAvatar(
             radius: 22,
-            backgroundImage: AssetImage('assets/images/profile.jpg'),
+            backgroundImage: AssetImage('assets/images/chat_logo.png'),
           ),
           const SizedBox(width: 12),
           Expanded(

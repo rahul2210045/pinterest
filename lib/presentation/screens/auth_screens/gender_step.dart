@@ -32,7 +32,6 @@ class _GenderScreenState extends State<GenderScreen> {
             children: [
               const SizedBox(height: 12),
 
-              /// 🔝 Header
               Row(
                 children: [
                   IconButton(
@@ -40,14 +39,13 @@ class _GenderScreenState extends State<GenderScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   const Spacer(),
-                  const StepDots(currentStep: 4), // 👈 update step index
+                  const StepDots(currentStep: 4), 
                   const Spacer(),
                 ],
               ),
 
               const SizedBox(height: 32),
 
-              /// 🧠 Title
               const Text(
                 "What's your gender?",
                 textAlign: TextAlign.center,
@@ -60,7 +58,6 @@ class _GenderScreenState extends State<GenderScreen> {
 
               const SizedBox(height: 12),
 
-              /// ℹ️ Subtitle
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
@@ -72,7 +69,6 @@ class _GenderScreenState extends State<GenderScreen> {
 
               const SizedBox(height: 32),
 
-              /// 👩 Female
               _GenderTile(
                 label: 'Female',
                 selected: _selectedGender == 'female',
@@ -81,7 +77,6 @@ class _GenderScreenState extends State<GenderScreen> {
 
               const SizedBox(height: 14),
 
-              /// 👨 Male
               _GenderTile(
                 label: 'Male',
                 selected: _selectedGender == 'male',
@@ -90,7 +85,6 @@ class _GenderScreenState extends State<GenderScreen> {
 
               const SizedBox(height: 14),
 
-              /// 🧑 Specify another
               _GenderTile(
                 label: 'Specify another',
                 selected: _selectedGender == 'other',
@@ -99,14 +93,12 @@ class _GenderScreenState extends State<GenderScreen> {
 
               const Spacer(),
 
-              /// 🔴 Next button
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: isSelected
                       ? () {
-                          // TODO: save gender in Clerk metadata later
                           context.go('/step-country');
                         }
                       : null,
@@ -129,7 +121,6 @@ class _GenderScreenState extends State<GenderScreen> {
   }
 }
 
-/// 🔘 Gender Option Tile
 class _GenderTile extends StatelessWidget {
   final String label;
   final bool selected;

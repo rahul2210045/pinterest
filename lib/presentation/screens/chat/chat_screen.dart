@@ -8,7 +8,7 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({
     super.key,
     this.userName = "Ishika Shukla",
-    this.profileImage = "assets/images/profile.jpg",
+    this.profileImage = "assets/images/chat_logo.png",
   });
 
   @override
@@ -20,12 +20,11 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Map<String, dynamic>> _messages = [];
   bool _isTyping = false;
-  bool _heartOnRight = false; // To toggle heart position
+  bool _heartOnRight = false; 
 
   @override
   void initState() {
     super.initState();
-    // Initial static message from "Ishika"
     _messages.add({
       "text": "cisco",
       "isMe": false,
@@ -70,11 +69,11 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _messages.add({
         "text": "❤️",
-        "isMe": true, // Toggles side based on your requirement
+        "isMe": true, 
         "time": "Just now",
         "isHeart": true,
       });
-      _heartOnRight = !_heartOnRight; // Switch for next tap
+      _heartOnRight = !_heartOnRight; 
     });
     _scrollToBottom();
   }

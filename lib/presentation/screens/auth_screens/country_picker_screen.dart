@@ -63,7 +63,6 @@ class CountryPickerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            /// 🔝 Header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
@@ -88,7 +87,6 @@ class CountryPickerScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            /// 🌍 Country list
             Expanded(
               child: ListView.separated(
                 itemCount: _countries.length,

@@ -84,7 +84,7 @@ class ConfettiPhysicsPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
 
-    final time = progress * 0.75; // total duration ≈ 750ms
+    final time = progress * 0.75; 
 
     const gravity = 2200.0;
     const speed = 1100.0;

@@ -70,7 +70,6 @@ class _BoardsHeader extends StatelessWidget {
       color: Colors.black,
       child: Column(
         children: [
-          /// SEARCH + ADD
           Row(
             children: [
                 Expanded(
@@ -109,7 +108,6 @@ class _BoardsHeader extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          /// FILTER ROW
           Row(
             children: [
               _FilterChip(

@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:pinterest/presentation/models/pin_view_model.dart';
 import 'package:pinterest/presentation/models/search_input_arg.dart';
 import 'package:pinterest/presentation/state_management/provider/board_provider.dart';
-import 'package:pinterest/presentation/state_management/provider/pins_provider.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/empty_pin_state.dart';
 
 enum PinLayout { standard, wide, compact }
@@ -281,7 +280,6 @@ class _PinsGrid extends StatelessWidget {
       );
     }
 
-    /// 🔥 STANDARD / COMPACT → Pinterest Masonry Grid
     final crossAxisCount = layout == PinLayout.compact ? 3 : 2;
 
     return Padding(

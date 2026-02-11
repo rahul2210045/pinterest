@@ -29,166 +29,168 @@ class _CreateBoardBottomSheetState
     super.initState();
     _controller.text =
         widget.photo['alt']?.toString().split(' ').take(3).join(' ') ??
-            'My board';
+        'My board';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF2E2E2B),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// TOP BAR
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+    final maxHeight = MediaQuery.of(context).size.height * 0.86;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+    return SizedBox(
+      height: maxHeight,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true, 
+        backgroundColor: const Color(0xFF2E2E2B),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: bottomInset), 
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// TOP BAR
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                  const Spacer(),
-                  const Text(
-                    'Create board',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      const Spacer(),
+                      const Text(
+                        'Create board',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: _createBoard,
+                        child: const Text(
+                          'Create',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: _createBoard,
-                    child: const Text(
-                      'Create',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                ),
+
+                const SizedBox(height: 16),
+
+                /// PREVIEW CARD
+                Center(
+                  child: SizedBox(
+                    width: 160,
+                    height: 160,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: SizedBox.expand(
+                              child: CachedNetworkImage(
+                                imageUrl: widget.photo['src']['large'],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+
+                          Container(width: 1, color: Colors.black),
+
+                          Expanded(
+                            flex: 4,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(color: Colors.grey.shade800),
+                                ),
+                                Container(height: 1, color: Colors.black),
+                                Expanded(
+                                  child: Container(color: Colors.grey.shade800),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
+                ),
 
-            const SizedBox(height: 16),
+                const SizedBox(height: 24),
 
-            /// PREVIEW CARD
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.photo['src']['medium'],
-                      width: 90,
-                      height: 90,
-                      fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.white24),
+                    ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _emptyBox(),
-                        const SizedBox(height: 6),
-                        _emptyBox(),
+                        const Text(
+                          'Name your board',
+                          style: TextStyle(color: Colors.white54),
+                        ),
+                        TextField(
+                          controller: _controller,
+                          maxLength: 50,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            counterStyle: TextStyle(color: Colors.white38),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            /// BOARD NAME
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: Colors.white24),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Name your board',
-                      style: TextStyle(color: Colors.white54),
-                    ),
-                    TextField(
-                      controller: _controller,
-                      maxLength: 50,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        counterStyle: TextStyle(color: Colors.white38),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
 
-            const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-            /// COLLABORATORS
-            _sectionTitle('Collaborators'),
-            _collaboratorTile(
-              name: 'Ishika shukla',
-              username: '@ishs4873',
-            ),
-            _collaboratorTile(
-              name: 'Aesthetics',
-              username: '@aesthetics',
-            ),
-            _addCollaborator(),
+                _sectionTitle('Collaborators'),
+                _collaboratorTile(name: 'Ishika shukla', username: '@ishs4873'),
+                _collaboratorTile(name: 'Aesthetics', username: '@aesthetics'),
+                _addCollaborator(),
 
-            const SizedBox(height: 24),
-
-            /// VISIBILITY
-            _sectionTitle('Visibility'),
-            SwitchListTile(
-              activeColor: Colors.deepPurple,
-              value: _isSecret,
-              onChanged: (v) => setState(() => _isSecret = v),
-              title: const Text(
-                'Keep this board secret',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: const Text(
-                'If you don’t want others to see this board',
-                style: TextStyle(color: Colors.white54),
-              ),
+                const SizedBox(height: 32),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-void _createBoard() {
-  ref.read(boardProvider.notifier).createBoard(
-    name: _controller.text.trim(),
-    photo: widget.photo,
-  );
+  void _createBoard() {
+    ref
+        .read(boardProvider.notifier)
+        .createBoard(name: _controller.text.trim(), photo: widget.photo);
 
-  Navigator.pop(context);
-  widget.onComplete();
-}
-
-
+    Navigator.pop(context);
+    widget.onComplete();
+  }
 
   Widget _emptyBox() {
     return Container(
@@ -214,10 +216,7 @@ void _createBoard() {
     );
   }
 
-  Widget _collaboratorTile({
-    required String name,
-    required String username,
-  }) {
+  Widget _collaboratorTile({required String name, required String username}) {
     return ListTile(
       leading: const CircleAvatar(backgroundColor: Colors.grey),
       title: Text(name, style: const TextStyle(color: Colors.white)),
@@ -226,9 +225,7 @@ void _createBoard() {
         onPressed: () => setState(() => _collabAdded = !_collabAdded),
         child: Text(
           _collabAdded ? 'Added' : 'Add',
-          style: TextStyle(
-            color: _collabAdded ? Colors.grey : Colors.white,
-          ),
+          style: TextStyle(color: _collabAdded ? Colors.grey : Colors.white),
         ),
       ),
     );

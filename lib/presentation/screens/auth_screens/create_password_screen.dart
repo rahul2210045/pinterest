@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/step_dots.dart';
 import 'package:pinterest/presentation/services/auth_service.dart/auth_service.dart';
+import 'package:pinterest/reusable_element.dart/app_loader.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
   final String email;
@@ -58,7 +59,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             children: [
               const SizedBox(height: 12),
 
-              /// 🔝 Header
               Row(
                 children: [
                   IconButton(
@@ -86,7 +86,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
               const SizedBox(height: 32),
 
-              /// 🔐 Password field
               TextField(
                 controller: _passwordController,
                 obscureText: _obscure,
@@ -122,7 +121,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
               const SizedBox(height: 16),
 
-              /// 📊 Strength indicator
               if (_passwordController.text.isNotEmpty) ...[
                 Container(
                   height: 6,
@@ -156,7 +154,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
               const SizedBox(height: 20),
 
-              /// ℹ️ Password tips
               GestureDetector(
                 onTap: () => _showPasswordTips(context),
                 child: Row(
@@ -177,7 +174,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
               const Spacer(),
 
-              /// 🔴 Next button
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -203,8 +199,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                               country: 'US',
                             );
 
-                            /// ✅ Signup success → move to next onboarding screen
-                            /// Example:
+                           
                             context.go('/step-name');
                           } catch (e) {
                             setState(() {
@@ -225,33 +220,13 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
+                          child: PinterestPaginationLoader(),
                         )
                       : const Text('Next', style: TextStyle(fontSize: 16)),
                 ),
               ),
 
-              // SizedBox(
-              //   width: double.infinity,
-              //   height: 52,
-              //   child: ElevatedButton(
-              //     onPressed: isStrong ? () {} : null,
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor:
-              //           isStrong ? Colors.red : Colors.grey[700],
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(28),
-              //       ),
-              //     ),
-              //     child: const Text(
-              //       'Next',
-              //       style: TextStyle(fontSize: 16),
-              //     ),
-              //   ),
-              // ),
+             
               const SizedBox(height: 16),
             ],
           ),

@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pinterest/presentation/models/search_input_arg.dart';
 import 'package:pinterest/presentation/state_management/provider/search_provider.dart';
-import 'package:pinterest/reusable_element.dart/nav_bar.dart';
+import 'package:pinterest/reusable_element.dart/app_loader.dart';
 import 'package:go_router/go_router.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
@@ -49,18 +50,29 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: state.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : CustomScrollView(
-              slivers: [
-                _searchBar(),
-                _carousel(state),
-                _featuredCollections(state),
-                ..._ideaSections(state),
-              ],
+      body: CustomScrollView(
+        slivers: [
+          _searchBar(),
+
+          if (state.isLoading)
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: PinterestPaginationLoader(), 
+              ),
             ),
+
+          if (!state.isLoading) ...[
+            _carousel(state),
+            _featuredCollections(state),
+            ..._ideaSections(state),
+          ],
+        ],
+      ),
     );
   }
+
+  
 
   SliverAppBar _searchBar() {
     return SliverAppBar(
@@ -70,7 +82,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       title: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          // 👉 Open search input screen
           context.push('/search-input');
         },
         child: Container(
@@ -204,7 +215,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
           const SizedBox(height: 6),
 
-          // 🔥 MAIN HEADING
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
@@ -219,7 +229,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
           const SizedBox(height: 16),
 
-          // 🧩 COLLECTION LIST
           SizedBox(
             height: 260,
             child: ListView.builder(
@@ -342,7 +351,19 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _ideaHeader(e.key),
+              _ideaHeader(
+                e.key,
+                onTap: () {
+                 
+                  context.push(
+                    '/search-result',
+                    extra: {
+                      'query': e.key,
+                      'args': SearchInputArgs(source: SearchSource.unknown),
+                    },
+                  );
+                },
+              ),
               const SizedBox(height: 10),
 
               ClipRRect(
@@ -361,7 +382,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                       return Expanded(
                         child: SizedBox.expand(
-                          // 🔑 THIS is the missing piece
                           child: CachedNetworkImage(
                             imageUrl: p['src']['medium'],
                             fit: BoxFit.cover,
@@ -383,73 +403,32 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     }).toList();
   }
 
-  // List<Widget> _ideaSections(SearchState state) {
-  //   return state.ideas.entries.map((e) {
-  //     return SliverToBoxAdapter(
-  //       child: Padding(
-  //         padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             _ideaHeader(e.key),
-  //             const SizedBox(height: 10),
-  //             ClipRRect(
-  //               borderRadius: BorderRadius.circular(18),
-  //               child: SizedBox(
-  //                 height: 140,
-  //                 child: Row(
-  //                   children: List.generate(e.value.length * 2 - 1, (i) {
-  //                     // Divider positions (odd indexes)
-  //                     if (i.isOdd) {
-  //                       return Container(width: 2, color: Colors.black);
-  //                     }
-
-  //                     // Image index
-  //                     final index = i ~/ 2;
-  //                     final p = e.value[index];
-
-  //                     return Expanded(
-  //                       child: CachedNetworkImage(
-  //                         imageUrl: p['src']['medium'],
-  //                         fit: BoxFit.cover,
-  //                         placeholder: (_, __) =>
-  //                             Container(color: Colors.grey.shade900),
-  //                         errorWidget: (_, __, ___) =>
-  //                             Container(color: Colors.grey.shade800),
-  //                       ),
-  //                     );
-  //                   }),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     );
-  //   }).toList();
-  // }
-
-  Widget _ideaHeader(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
+ 
+  Widget _ideaHeader(String title, {required VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-            color: Colors.white12,
-            shape: BoxShape.circle,
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Colors.white12,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+
+            ),
+            child: const Icon(Icons.search, color: Colors.white),
           ),
-          child: const Icon(Icons.search, color: Colors.white),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -10,7 +10,7 @@ class ProfileDetailScreen extends StatelessWidget {
     final user = auth.user;
 
     final name =
-        user?.firstName ?? user?.username ?? 'Rahul'; // fallback
+        user?.firstName ?? user?.username ?? 'Rahul'; 
     final firstLetter = name.isNotEmpty ? name[0].toUpperCase() : 'R';
 
     return Scaffold(
@@ -35,18 +35,15 @@ class ProfileDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// PROFILE HEADER
             _ProfileHeader(
               firstLetter: firstLetter,
               name: name,
               onTap: () {
-                // TODO: navigate to view profile
               },
             ),
 
             const SizedBox(height: 24),
 
-            /// SETTINGS LABEL
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -61,7 +58,6 @@ class ProfileDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            /// SETTINGS LIST
             _SettingsTile(title: 'Account management'),
             _SettingsTile(title: 'Profile visibility'),
             _SettingsTile(title: 'Refine your recommendations'),
@@ -73,7 +69,6 @@ class ProfileDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            /// LOGIN SECTION
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -93,17 +88,14 @@ class ProfileDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            /// LOGOUT
             _LogoutTile(
               onTap: () async {
                 await auth.signOut();
-                // GoRouter redirect will take user to /auth automatically
               },
             ),
 
             const SizedBox(height: 24),
 
-            /// SUPPORT SECTION
             _SettingsTile(title: 'Support'),
             _SettingsTile(title: 'Help center'),
             _SettingsTile(title: 'Terms of service'),

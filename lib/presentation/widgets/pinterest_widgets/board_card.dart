@@ -18,14 +18,12 @@ class BoardCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// 🔥 IMAGE COLLAGE
         ClipRRect(
           borderRadius: BorderRadius.circular(18),
           child: AspectRatio(
             aspectRatio: 1,
             child: Row(
               children: [
-                /// LEFT IMAGE (60%)
                 Expanded(
                   flex: 6,
                   child: pins.isNotEmpty
@@ -38,15 +36,12 @@ class BoardCard extends StatelessWidget {
                       : Container(color: Colors.grey.shade800),
                 ),
 
-                /// VERTICAL DIVIDER
                 Container(width: 1, color: Colors.black),
 
-                /// RIGHT COLUMN (40%)
                 Expanded(
                   flex: 4,
                   child: Column(
                     children: [
-                      /// TOP IMAGE
                       Expanded(
                         child: pins.length > 1
                             ? SizedBox.expand(
@@ -58,10 +53,8 @@ class BoardCard extends StatelessWidget {
                             : Container(color: Colors.grey.shade800),
                       ),
 
-                      /// HORIZONTAL DIVIDER
                       Container(height: 1, color: Colors.black),
 
-                      /// BOTTOM IMAGE
                       Expanded(
                         child: pins.length > 2
                             ? SizedBox.expand(
@@ -82,7 +75,6 @@ class BoardCard extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        /// 📌 BOARD NAME
         Text(
           board.name,
           maxLines: 1,
@@ -94,7 +86,6 @@ class BoardCard extends StatelessWidget {
           ),
         ),
 
-        /// 📊 PIN COUNT + TIME
         Text(
           '${board.pins.length} Pins · ${_timeAgo(board.createdAt)}',
           style: const TextStyle(color: Colors.white54, fontSize: 12),
@@ -109,81 +100,3 @@ class BoardCard extends StatelessWidget {
     return '${diff.inDays}d';
   }
 }
-
-// class BoardCard extends StatelessWidget {
-//   final BoardModel board;
-
-//   const BoardCard({super.key, required this.board});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final pins = board.pins.take(3).toList();
-
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         /// IMAGE COLLAGE
-//         ClipRRect(
-//           borderRadius: BorderRadius.circular(18),
-//           child: AspectRatio(
-//             aspectRatio: 1,
-//             child: Row(
-//               children: [
-//                 if (pins.isNotEmpty)
-//                   Expanded(
-//                     flex: 6,
-//                     child: Image.network(pins[0].large, fit: BoxFit.cover),
-//                   ),
-
-//                 if (pins.length > 1)
-//                   Expanded(
-//                     flex: 4,
-//                     child: Column(
-//                       children: [
-//                         Expanded(
-//                           child: Image.network(
-//                             pins[1].large,
-//                             fit: BoxFit.cover,
-//                           ),
-//                         ),
-//                         if (pins.length > 2)
-//                           Expanded(
-//                             child: Image.network(
-//                               pins[2].large,
-//                               fit: BoxFit.cover,
-//                             ),
-//                           ),
-//                       ],
-//                     ),
-//                   ),
-//               ],
-//             ),
-//           ),
-//         ),
-
-//         // const SizedBox(height: 0),
-
-//         /// BOARD INFO
-//         Text(
-//           board.name,
-//           maxLines: 1,
-//           overflow: TextOverflow.ellipsis,
-//           style: const TextStyle(
-//             color: Colors.white,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//         Text(
-//           '${board.pins.length} Pins · ${_timeAgo(board.createdAt)}',
-//           style: const TextStyle(color: Colors.white54, fontSize: 12),
-//         ),
-//       ],
-//     );
-//   }
-
-//   String _timeAgo(DateTime date) {
-//     final diff = DateTime.now().difference(date);
-//     if (diff.inHours < 24) return '${diff.inHours}h';
-//     return '${diff.inDays}d';
-//   }
-// }

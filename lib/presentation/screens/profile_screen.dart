@@ -17,7 +17,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   late final TabController _tabController;
   late final PageController _pageController;
 
-  /// Default → Boards (index 1)
   int _currentIndex = 1;
 
   @override
@@ -32,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     _pageController = PageController(initialPage: _currentIndex);
 
-    /// TAB → PAGE
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         _pageController.animateToPage(
@@ -58,30 +56,36 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: SafeArea(
         child: Column(
           children: [
-            GestureDetector(
-              onTap: () {
-                context.go('/profile-detail');
-              },
-              child: CircleAvatar(
-                radius: 12,
-                backgroundColor: Colors.white,
-                child: Text(
-                  'r',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.push('/profile-detail');
+                    },
+                    child: const CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.grey,
+                      child: Text(
+                        'r',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+
+                  const SizedBox(width: 16),
+
+                  Expanded(child: ProfileTabs(controller: _tabController)),
+                ],
               ),
             ),
 
-            /// PROFILE HEADER (avatar etc — keep yours)
-            const SizedBox(height: 12),
-
-            /// TAB BAR
-            ProfileTabs(controller: _tabController),
-
-            /// PAGES
+           
             Expanded(
               child: PageView(
                 controller: _pageController,

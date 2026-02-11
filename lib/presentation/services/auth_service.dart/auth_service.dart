@@ -35,25 +35,11 @@ class AuthService {
       emailAddress: email,
       password: password,
       passwordConfirmation: password,
-      // username: name,
     );
 
-    // Save extra profile data
-    //   await auth.updateUser(
-    // metadata: {
-    //   "onboardingCompleted": false,
-    // },
-    // );
-    // await auth.updateUser(
-    //   metadata: {
-    //     "dob": dob.toIso8601String(),
-    //     "gender": gender,
-    //     "country": country,
-    //   },
-    // );
+    
   }
 
-  /// GOOGLE SIGN IN
   Future<void> signInWithGoogle(BuildContext context) async {
     final auth = ClerkAuth.of(context);
 
@@ -63,7 +49,6 @@ class AuthService {
     );
   }
 
-  /// LOGOUT
   Future<void> signOut(BuildContext context) async {
     final auth = ClerkAuth.of(context);
     await auth.signOut();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinterest/presentation/services/auth_service.dart/auth_service.dart';
+import 'package:pinterest/reusable_element.dart/app_loader.dart';
 
 class LoginPasswordScreen extends StatefulWidget {
   final String email;
@@ -17,9 +18,7 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
   bool _loading = false;
   String? _errorText;
 
-// class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
-//   final TextEditingController _passwordController = TextEditingController();
-//   bool _obscurePassword = true;
+
 
   @override
   void dispose() {
@@ -39,7 +38,6 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
             children: [
               const SizedBox(height: 12),
 
-              /// 🔝 Header
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -65,7 +63,6 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
               const Divider(color: Colors.white24, height: 1),
               const SizedBox(height: 24),
 
-              /// Google button
               OutlinedButton.icon(
                 onPressed: () {
                   // TODO: Google login
@@ -92,7 +89,6 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
 
               const SizedBox(height: 20),
 
-              /// Email field (prefilled, read-only)
               TextField(
                 enabled: false,
                 controller: TextEditingController(text: widget.email),
@@ -107,7 +103,6 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
 
               const SizedBox(height: 16),
 
-              /// Password field
               TextField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
@@ -176,7 +171,6 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
                 password: password,
               );
 
-              /// ✅ SUCCESS → GoRouter redirect will send to dashboard
             } catch (e) {
               setState(() {
                 _errorText = 'Incorrect password. Try again.';
@@ -195,10 +189,7 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
         ? const SizedBox(
             height: 20,
             width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.white,
-            ),
+            child: PinterestPaginationLoader(),
           )
         : const Text(
             'Log In',
@@ -207,28 +198,10 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
   ),
 ),
 
-              // SizedBox(
-              //   height: 52,
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       // TODO: Call Clerk login
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.red,
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(28),
-              //       ),
-              //     ),
-              //     child: const Text(
-              //       'Log In',
-              //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              //     ),
-              //   ),
-              // ),
+            
 
               const SizedBox(height: 16),
 
-              /// Forgot password
               Center(
                 child: GestureDetector(
                   onTap: () {

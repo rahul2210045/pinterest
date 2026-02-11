@@ -11,20 +11,7 @@ import 'package:pinterest/presentation/widgets/pinterest_widgets/pin_tile.dart';
 import 'package:pinterest/reusable_element.dart/app_loader.dart';
 import 'package:pinterest/reusable_element.dart/nav_bar.dart';
 
-// class SearchResultScreen extends ConsumerStatefulWidget {
-//   final String query;
-//   final SearchInputArgs args;
 
-//   const SearchResultScreen({
-//     super.key,
-//     required this.query,
-//     required this.args,
-//   });
-
-//   @override
-//   ConsumerState<SearchResultScreen> createState() =>
-//       _SearchResultScreenState();
-// }
 
 class SearchResultScreen extends ConsumerStatefulWidget {
   final String query;
@@ -65,10 +52,8 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
         widget.args.source == SearchSource.boards ||
         widget.args.source == SearchSource.profile;
 
-    /// API STATE
     final apiState = ref.watch(searchResultProvider(widget.query));
 
-    /// LOCAL DATA
     final boards = ref.watch(boardProvider);
     final allPins = ref.watch(allSavedPinsProvider);
 
@@ -80,17 +65,13 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
 
-      /// 🚫 NO APP BAR FOR CONTEXTUAL SEARCH
       body: CustomScrollView(
         controller: _controller,
         slivers: [
-          /// ===============================
-          /// CONTEXTUAL SEARCH (BOARDS / PROFILE)
-          /// ===============================
+         
           if (isContextualSearch) ...[
             const SliverPadding(padding: EdgeInsets.only(top: 40)),
 
-            /// BOARDS
             if (matchedBoards.isNotEmpty)
               SliverToBoxAdapter(
                 child: Padding(
@@ -113,7 +94,6 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
                 ),
               ),
 
-            /// PINS
             if (matchedPins.isNotEmpty)
               SliverPadding(
                 padding: const EdgeInsets.all(12),
@@ -132,7 +112,6 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
                 ),
               ),
 
-            /// END TEXT
             if (hasLocalResults)
               SliverToBoxAdapter(
                 child: Padding(
@@ -159,7 +138,6 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
 
             const SliverToBoxAdapter(child: Divider(color: Colors.white24)),
 
-            /// MORE IDEAS HEADER
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
@@ -185,18 +163,12 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
             ),
           ],
 
-          /// ===============================
-          /// NORMAL SEARCH (DEFAULT)
-          /// ===============================
+          
           if (!isContextualSearch) ...[
-            /// ⬇️ USE YOUR OLD NORMAL SEARCH UI HERE
-            /// (SliverAppBar + Filter chips + Grid)
-            /// KEEP YOUR COMMENTED CODE AS-IS
+           
           ],
 
-          /// ===============================
-          /// API GRID (USED BY BOTH)
-          /// ===============================
+         
           if (apiState.isInitialLoading)
             const SliverToBoxAdapter(child: SearchShimmer()),
 
@@ -435,7 +407,6 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
 //     _controller.addListener(() {
 //       final offset = _controller.offset;
 
-//       // 🔥 Toggle compact chip
 //       if (offset > 120 && !_showCompactChip) {
 //         setState(() => _showCompactChip = true);
 //       } else if (offset < 80 && _showCompactChip) {
@@ -501,7 +472,7 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
 //           ),
 
 //           Positioned(
-//             top: 40, // 🔒 fixed position (no movement)
+//             top: 40, 
 //             left: 0,
 //             right: 0,
 //             child: Center(
@@ -582,8 +553,7 @@ class _SearchChipFloating extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // const Icon(Icons.search, color: Colors.white70, size: 18),
-          // const SizedBox(width: 8),
+        
           Text(
             query,
             maxLines: 1,

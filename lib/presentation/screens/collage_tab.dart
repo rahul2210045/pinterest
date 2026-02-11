@@ -33,15 +33,12 @@ class _CollagesTabState extends State<CollagesTab> {
           ),
         ),
 
-        Expanded(
-          child: _CollageEmptyState(
-            isCreatedByYou: isCreatedByYou,
-          ),
-        ),
+        Expanded(child: _CollageEmptyState(isCreatedByYou: isCreatedByYou)),
       ],
     );
   }
 }
+
 class _FilterChip extends StatelessWidget {
   final String text;
   final bool selected;
@@ -74,6 +71,7 @@ class _FilterChip extends StatelessWidget {
     );
   }
 }
+
 class _CollageEmptyState extends StatelessWidget {
   final bool isCreatedByYou;
 
@@ -87,15 +85,10 @@ class _CollageEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            /// 🎨 ILLUSTRATION
-            Image.asset(
-              'assets/images/collage_illustration.png',
-              height: 180,
-            ),
+            Image.asset('assets/images/bottle.png', height: 180),
 
             const SizedBox(height: 24),
 
-            /// 📝 TITLE
             Text(
               isCreatedByYou
                   ? 'Create a collage'
@@ -110,7 +103,6 @@ class _CollageEmptyState extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            /// 📄 DESCRIPTION
             Text(
               isCreatedByYou
                   ? 'Snip-and-paste Pins to make something totally new—then publish it to inspire people with what you create.'
@@ -125,7 +117,6 @@ class _CollageEmptyState extends StatelessWidget {
 
             const SizedBox(height: 28),
 
-            /// 🔴 CTA BUTTON
             SizedBox(
               width: 200,
               height: 46,

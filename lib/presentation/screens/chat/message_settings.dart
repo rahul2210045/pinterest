@@ -7,7 +7,7 @@ class MessageSettingsScreen extends StatelessWidget {
   const MessageSettingsScreen({
     super.key,
     this.userName = "Ishika Shukla",
-    this.profileImage = "assets/images/profile.jpg",
+    this.profileImage = "assets/images/chat_logo.png",
   });
 
   @override
@@ -35,7 +35,6 @@ class MessageSettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 20),
-          // Members Section Header
           const Text(
             'Members',
             style: TextStyle(
@@ -46,15 +45,12 @@ class MessageSettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Member Row 1 (Ishika)
           _buildMemberRow(userName, profileImage, "Block"),
           const SizedBox(height: 16),
 
-          // Member Row 2 (Example of another blockable member)
           _buildMemberRow("Agam Tyagi", profileImage, "Block"),
 
           const SizedBox(height: 12),
-          // Eclipsed Info Text
           const Text(
             "Blocking a member prevents them from sending you messages or interacting with your pins. People aren't notified when you block them ",
             maxLines: 2,
@@ -64,7 +60,6 @@ class MessageSettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 32),
 
-          // Notifications Section Header
           const Text(
             'Notifications',
             style: TextStyle(
@@ -75,7 +70,6 @@ class MessageSettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 4),
 
-          // Notifications Toggle Row
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text(
@@ -96,7 +90,6 @@ class MessageSettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 28),
 
-          // Privacy & Support Section Header
           const Text(
             'Privacy and support',
             style: TextStyle(
@@ -106,16 +99,9 @@ class MessageSettingsScreen extends StatelessWidget {
             ),
           ),
 
-          // const SizedBox(height: 12),
-
-          // // Privacy Info Text
-          // const Text(
-          //   "Report this conversation if it violates our community guidelines. We won't notify the members.",
-          //   style: TextStyle(color: Colors.grey, fontSize: 13, height: 1.4),
-          // ),
+         
           const SizedBox(height: 12),
 
-          // Support Action Rows
           _buildSupportItem("Report this conversation"),
           _buildSupportItem("Leave conversation", isDestructive: true),
         ],
@@ -141,7 +127,6 @@ class MessageSettingsScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            // border: Border.all(),
             borderRadius: BorderRadius.circular(14),
             color: Colors.grey.shade700,
           ),

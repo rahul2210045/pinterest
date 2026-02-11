@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:pinterest/data/repositories/pins_repostiory.dart';
 import 'package:pinterest/presentation/models/pin_view_model.dart';
@@ -48,7 +47,6 @@ class PinsNotifier extends StateNotifier<PinsState> {
         break;
 
       case PinsFilter.created:
-        // If you later add "createdByUser" flag, filter here
         state = state.copyWith(
           filter: filter,
           pins: repo.getRecentPins(),

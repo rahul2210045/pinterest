@@ -1,17 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:pinterest/data/local/board_model.dart';
 import 'package:pinterest/presentation/screens/detial_screen.dart';
 import 'package:pinterest/presentation/state_management/provider/board_provider.dart';
 import 'package:pinterest/presentation/state_management/provider/board_tab_provider.dart';
 import 'package:pinterest/presentation/state_management/provider/dashboard_provider.dart';
-import 'package:pinterest/presentation/state_management/provider/recently_viewed_provider.dart';
 import 'package:pinterest/presentation/widgets/animation/save_pin_animation.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/bottom_sheet.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/dashboard_tabs.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/pin_tile.dart';
 import 'package:pinterest/presentation/widgets/shimmer/grdi_shimmer.dart';
-import 'package:pinterest/reusable_element.dart/nav_bar.dart';
+import 'package:pinterest/reusable_element.dart/app_loader.dart';
 import 'package:pinterest/reusable_element.dart/refresh_loader.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -23,26 +25,25 @@ class DashboardScreen extends ConsumerStatefulWidget {
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   late final ScrollController _controller;
-  // int _currentIndex = 0;
+  late final PageController _pageController;
+  Timer? _paginationDebounce;
+  int _lastPhotoCount = 0;
+  bool _didAnimateForThisPage = false;
+  double _lastScrollOffset = 0;
 
   @override
   void initState() {
     super.initState();
     _controller = ScrollController()..addListener(_onScroll);
+    _pageController = PageController();
   }
 
-  void _onScroll() {
-    final notifier = ref.read(dashboardProvider.notifier);
-
-    if (_controller.position.pixels < -80 &&
-        !ref.read(dashboardProvider).isRefreshing) {
-      notifier.refresh();
-    }
-
-    if (_controller.position.pixels >
-        _controller.position.maxScrollExtent - 400) {
-      notifier.loadMore();
-    }
+  @override
+  void dispose() {
+    _paginationDebounce?.cancel();
+    _controller.dispose();
+    _pageController.dispose();
+    super.dispose();
   }
 
   void openPinActionsSheet(
@@ -85,66 +86,152 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
+  void _onScroll() {
+    _lastScrollOffset = _controller.offset;
+
+    final notifier = ref.read(dashboardProvider.notifier);
+    final state = ref.read(dashboardProvider);
+
+    if (_controller.position.pixels < -80 && !state.isRefreshing) {
+      notifier.refresh();
+    }
+
+    if (_controller.position.pixels >
+        _controller.position.maxScrollExtent - 400) {
+      if (state.isPaginating || state.isLoading) return;
+
+      _paginationDebounce?.cancel();
+      _paginationDebounce = Timer(const Duration(milliseconds: 250), () {
+        notifier.loadMore();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final dashboardState = ref.watch(dashboardProvider);
-    final dashboardNotifier = ref.read(dashboardProvider.notifier);
-
     final selectedTab = ref.watch(boardTabProvider);
-    final boards = ref.watch(boardProvider);
+    final isForYouTab = selectedTab == 0;
+    
 
-    final bool isForYou = selectedTab == 0;
-    final bool isBoardTab = selectedTab > 0 && selectedTab <= boards.length;
+    final dashboardState = ref.watch(dashboardProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentCount = dashboardState.photos.length;
+
+      if (!dashboardState.isPaginating &&
+          currentCount > _lastPhotoCount &&
+          _controller.hasClients) {
+        if (!_didAnimateForThisPage) {
+          _didAnimateForThisPage = true;
+          _controller.animateTo(
+            (_lastScrollOffset + 160).clamp(
+              0.0,
+              _controller.position.maxScrollExtent,
+            ),
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOutCubic,
+          );
+        }
+      }
+
+      if (dashboardState.isPaginating) {
+        _didAnimateForThisPage = false;
+      }
+
+      _lastPhotoCount = currentCount;
+    });
+
+    final dashboardNotifier = ref.read(dashboardProvider.notifier);
+    final boards = ref.watch(boardProvider);
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            const DashboardBoardTabs(),
+            DashboardBoardTabs(
+              onTabSelected: (index) {
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOut,
+                );
+              },
+            ),
+
             if (dashboardState.isRefreshing) const PinterestRefreshLoader(),
 
             Expanded(
-              child: RefreshIndicator(
-                color: Colors.white,
-                backgroundColor: Colors.black,
-                onRefresh: dashboardNotifier.refresh,
-                child: CustomScrollView(
-                  controller: _controller,
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    if (isForYou && dashboardState.isLoading)
-                      const SliverToBoxAdapter(child: ShimmerGrid()),
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  ref.read(boardTabProvider.notifier).state = index;
+                },
+                itemCount: boards.length + 1,
+                itemBuilder: (context, index) {
+                  final isForYou = index == 0;
+                  final isBoardTab = index > 0 && index <= boards.length;
 
-                    if (isForYou)
-                      _dashboardGrid(state: dashboardState, context: context),
-                    if (isBoardTab) ...[
-                      _boardContent(
-                        board: boards[selectedTab - 1],
-                        dashboardState: dashboardState,
-                        context: context,
-                      ),
+                  return RefreshIndicator(
+                    color: Colors.transparent,
+                    backgroundColor: Colors.black,
+                    onRefresh: dashboardNotifier.refresh,
+                    child: CustomScrollView(
+                      controller: _controller,
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        if (isForYou && dashboardState.isLoading)
+                          const SliverToBoxAdapter(child: ShimmerGrid()),
 
-                      _dashboardGrid(state: dashboardState, context: context),
-                    ],
-                  ],
-                ),
+                        if (isForYou)
+                          _dashboardGrid(
+                            state: dashboardState,
+                            context: context,
+                            isForYouTab: true,
+                          ),
+
+                        if (isBoardTab) ...[
+                          _boardContent(
+                            board: boards[index - 1],
+                            dashboardState: dashboardState,
+                            context: context,
+                          ),
+                          _dashboardGrid(
+                            state: dashboardState,
+                            context: context,
+                            isForYouTab: false,
+                            currentBoard: boards[index - 1],
+                          ),
+                        ],
+                        if (dashboardState.isPaginating)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                top: 24,
+                                bottom:
+                                    MediaQuery.of(context).padding.bottom + 72,
+                              ),
+                              child: const Center(
+                                child: PinterestPaginationLoader(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
-      // bottomNavigationBar: PinterestBottomNav(
-      //   selectedIndex: _currentIndex,
-      //   onTap: (i) {
-      //     setState(() => _currentIndex = i);
-      //   },
-      // ),
     );
   }
 
+ 
   SliverPadding _dashboardGrid({
     required DashboardState state,
     required BuildContext context,
+    BoardModel? currentBoard,
+    required bool isForYouTab,
   }) {
     return SliverPadding(
       padding: const EdgeInsets.all(10),
@@ -152,38 +239,48 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        childCount: state.photos.length + (state.isPaginating ? 1 : 0),
+        childCount: state.photos.length,
         itemBuilder: (context, index) {
           final photo = state.photos[index];
-          return Builder(
-            builder: (tileContext) {
-              void Function(String board)? saveUI;
 
-              return PinTile(
-                id: photo['id'].toString(),
+          final alreadySaved =
+              currentBoard?.pins.any(
+                (p) => p.id.toString() == photo['id'].toString(),
+              ) ??
+              false;
+
+          return PinTile(
+            id: photo['id'].toString(),
+            imageUrl: photo['src']['large'],
+            aspectRatio: photo['width'] / photo['height'],
+            onTap: () => openPinDetail(context, photo),
+
+            showQuickSave: !isForYouTab,
+            isSavedInitially: alreadySaved,
+
+            onQuickSave: () {
+              if (currentBoard == null) return;
+
+              ref
+                  .read(boardProvider.notifier)
+                  .savePinToBoard(currentBoard, photo);
+
+              playSavePinAnimation(
+                context: context,
                 imageUrl: photo['src']['large'],
-                aspectRatio: photo['width'] / photo['height'],
-                onTap: () async {
-                  // await markPinAsViewed(savedPin);
-
-                  openPinDetail(context, photo);
-                },
-                // () =>
-                //  openPinDetail(context, photo),
-                registerSaveHandler: (fn) => saveUI = fn,
-                onMoreTap: () {
-                  openPinActionsSheet(context, photo, (board) async {
-                    saveUI?.call(board);
-                    await playSavePinAnimation(
-                      context: context,
-                      imageUrl: photo['src']['large'],
-                    );
-                  });
-                },
               );
+            },
+            onMoreTap: () {
+              openPinActionsSheet(context, photo, (boardName) async {
+                await playSavePinAnimation(
+                  context: context,
+                  imageUrl: photo['src']['large'],
+                );
+              });
             },
           );
         },
+
       ),
     );
   }
@@ -195,13 +292,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }) {
     return SliverList(
       delegate: SliverChildListDelegate([
+        SizedBox(height: 18),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             board.name,
             style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
           ),
@@ -210,8 +308,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${board.pins.length} Pins · Your saves',
-            style: const TextStyle(color: Colors.white70),
+            '${board.pins.length} Pins ',
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'Your saves ',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
 

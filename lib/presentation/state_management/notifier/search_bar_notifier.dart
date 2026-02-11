@@ -14,7 +14,6 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     loadInitial();
   }
 
-  /// INITIAL LOAD (shimmer only once)
   Future<void> loadInitial() async {
     _page = 1;
     _hasMore = true;
@@ -36,7 +35,6 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     }
   }
 
-  /// PAGINATION (loader only, no shimmer)
   Future<void> loadMore() async {
     if (state.isPaginating || !_hasMore) return;
 

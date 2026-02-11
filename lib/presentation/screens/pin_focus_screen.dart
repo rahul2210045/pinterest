@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pinterest/reusable_element.dart/app_loader.dart';
 import 'package:pinterest/reusable_element.dart/nav_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pinterest/presentation/state_management/provider/dashboard_provider.dart';
@@ -311,10 +312,7 @@ class _PinFocusScreenState extends ConsumerState<PinFocusScreen>
                   child: Padding(
                     padding: EdgeInsets.all(24),
                     child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
+                      child: PinterestPaginationLoader(),
                     ),
                   ),
                 ),

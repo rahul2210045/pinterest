@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pinterest/reusable_element.dart/nav_bar.dart';
+import 'package:pinterest/reusable_element.dart/app_loader.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PinDetailScreen extends StatefulWidget {
@@ -56,10 +56,7 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     setState(() {
-      relatedPhotos = List.generate(
-        10,
-        (_) => widget.photo, 
-      );
+      relatedPhotos = List.generate(10, (_) => widget.photo);
 
       isLoading = false;
       showExploreShimmer = false;
@@ -89,25 +86,20 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
             controller: _controller,
             physics: const BouncingScrollPhysics(),
             slivers: [
-              /// MAIN IMAGE
-                SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: AspectRatio(
                   aspectRatio: aspectRatio,
                   child: InkWell(
-                  onTap: () {
-                    context.push(
-      '/pin-focus',
-      extra: widget.photo, 
-    );
-
-                  },
-                  child: CachedNetworkImage(
-                    imageUrl: widget.photo['src']['large'],
-                    fit: BoxFit.cover,
-                  ),
+                    onTap: () {
+                      context.push('/pin-focus', extra: widget.photo);
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: widget.photo['src']['large'],
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                ),
+              ),
 
               SliverToBoxAdapter(
                 child: Padding(
@@ -120,7 +112,11 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
                       const SizedBox(width: 12),
                       const Icon(Icons.more_horiz, color: Colors.white),
                       const Spacer(),
-                      _saveButton(),
+                      _saveButton(
+                        onTap: () {
+                        
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -162,7 +158,6 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
                 ),
               ),
 
-            
               if (isLoading)
                 SliverPadding(
                   padding: const EdgeInsets.all(10),
@@ -178,7 +173,6 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
                     },
                   ),
                 )
-             
               else
                 SliverPadding(
                   padding: const EdgeInsets.all(10),
@@ -205,7 +199,7 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(20),
                     child: Center(
-                      child: CircularProgressIndicator(color: Colors.white),
+                      child: PinterestPaginationLoader(),
                     ),
                   ),
                 ),
@@ -226,18 +220,18 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
         ],
       ),
 
-      bottomNavigationBar: AnimatedContainer(
-        duration: const Duration(milliseconds: 400),
-        height: showBottomNav ? 70 : 0,
-        child: showBottomNav
-            ? PinterestBottomNav(
-                selectedIndex: _currentIndex,
-                onTap: (i) {
-                  setState(() => _currentIndex = i);
-                },
-              )
-            : null,
-      ),
+      // bottomNavigationBar: AnimatedContainer(
+      //   duration: const Duration(milliseconds: 400),
+      //   height: showBottomNav ? 70 : 0,
+      //   child: showBottomNav
+      //       ? PinterestBottomNav(
+      //           selectedIndex: _currentIndex,
+      //           onTap: (i) {
+      //             setState(() => _currentIndex = i);
+      //           },
+      //         )
+      //       : null,
+      // ),
     );
   }
 
@@ -254,16 +248,28 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
     );
   }
 
-  Widget _saveButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        shape: const StadiumBorder(),
+  Widget _saveButton({required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Text(
+          "Save",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
-      onPressed: () {},
-      child: const Text("Save"),
     );
   }
+
+ 
 
   Widget _shimmerTile() {
     return Shimmer.fromColors(
@@ -307,4 +313,3 @@ class _PinDetailScreenState extends State<PinDetailScreen> {
     );
   }
 }
-

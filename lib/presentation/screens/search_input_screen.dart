@@ -1,13 +1,9 @@
-// import 'package:flutter/material.dart';
-// import 'package:go_router/go_router.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinterest/presentation/models/search_input_arg.dart';
-// import 'package:pinterest/presentation/state_management/provider/recent_viewed_provider.dart';
-// import 'package:pinterest/presentation/state_management/provider/recent_saved_provider.dart';
 import 'package:pinterest/presentation/state_management/provider/recently_viewed_provider.dart';
-// import 'package:pinterest/presentation/widgets/pinterest_widgets/recent_pins_row.dart';
 import 'package:pinterest/presentation/widgets/pinterest_widgets/recently_viewed_row.dart';
 
 class SearchInputScreen extends ConsumerStatefulWidget {
@@ -43,12 +39,7 @@ void _submit() {
   );
 }
 
-  // void _submit() {
-  //   final query = _controller.text.trim();
-  //   if (query.isEmpty) return;
-
-  //   context.push('/search-result', extra: query);
-  // }
+ 
 
   @override
   void dispose() {
@@ -60,7 +51,6 @@ void _submit() {
   @override
   Widget build(BuildContext context) {
     final recentViewed = ref.watch(recentViewedProvider);
-    // final recentSaved = ref.watch(recentSavedProvider);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -70,7 +60,6 @@ void _submit() {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// 🔍 SEARCH BAR ROW
               Row(
                 children: [
                   Expanded(
@@ -124,7 +113,6 @@ void _submit() {
                 ],
               ),
 
-              /// 🔥 ONLY SHOW FOR PROFILE SEARCH
               if (widget.args.source == SearchSource.boards) ...[
                 const SizedBox(height: 24),
 
@@ -146,10 +134,9 @@ void _submit() {
                     onSeeMore: () {
                       context.push(
                         '/recent-pins',
-                        extra: 'viewed', // or 'saved'
+                        extra: 'viewed', 
                       );
 
-                      // context.push('/recent-pins', extra: 'saved');
                     },
                   ),
               ],

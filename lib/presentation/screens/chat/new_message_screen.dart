@@ -130,9 +130,9 @@ class _NewMessageScreenState extends State<NewMessageScreen> {
                 _buildPersonTile(
                   0,
                   'Ishika Shukla',
-                  'assets/images/profile.jpg',
+                  'assets/images/chat_logo.png',
                 ),
-                _buildPersonTile(1, 'Agam Tyagi', 'assets/images/profile.jpg'),
+                _buildPersonTile(1, 'Agam Tyagi', 'assets/images/chat_logo.png'),
               ],
             ),
           ),

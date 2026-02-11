@@ -11,7 +11,10 @@ class GroupEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/fish.png', height: 160), // replace with your asset
+            Image.asset(
+              'assets/images/fish.png',
+              height: 180,
+            ), 
             const SizedBox(height: 24),
             const Text(
               'Collaborate on a board',
@@ -29,8 +32,7 @@ class GroupEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(28),

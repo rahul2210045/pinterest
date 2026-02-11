@@ -37,7 +37,6 @@ class _NameScreenState extends State<NameScreen> {
             children: [
               const SizedBox(height: 12),
 
-              /// 🔝 Header
               Row(
                 children: [
                   IconButton(
@@ -45,14 +44,13 @@ class _NameScreenState extends State<NameScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   const Spacer(),
-                  const StepDots(currentStep: 2), // 👈 3rd dot active
+                  const StepDots(currentStep: 2), 
                   const Spacer(),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              /// Title
               const Center(
                 child: Text(
                   "What's your name?",
@@ -89,14 +87,12 @@ class _NameScreenState extends State<NameScreen> {
 
               const Spacer(),
 
-              /// 🔴 Next button
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: _isValid
                       ? () {
-                          /// 👉 Navigate to DOB screen later
                           context.go('/step-dob');
                         }
                       : null,
